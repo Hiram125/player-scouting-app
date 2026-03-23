@@ -1,17 +1,33 @@
 <?php
 
-namespace App\Models;
+namespace App\Http\Controllers;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use App\Models\Player;
 
-class Player extends Model
+class PlayerController extends Controller
 {
-    use HasFactory;
+    // Existing method(s) you might already have can stay here
+    // For example, listing players in your Blade
+    public function index()
+    {
+        $players = Player::all(); // fetch all players
+        return view('players.index', compact('players')); // existing Blade
+    }
 
-    protected $fillable = [
-        'name','age','position','club',
-        'pace','shooting','passing','dribbling','strength','comments',
-        'matches','goals','assists','minutes_played'
-    ];
+    // NEW Step 3: method for Chart.js stats
+    public function statsChart()
+    {
+        // fetch only fields needed for the graph
+        $players = Player::select(
+            'name', 
+            'goals', 
+            'assists', 
+            'matches', 
+            'minutes_played'
+        )->get();
+
+        // pass to Blade (create players.stats or use existing)
+        return view('players.stats', compact('players'));
+    }
 }

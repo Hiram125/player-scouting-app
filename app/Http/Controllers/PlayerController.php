@@ -13,7 +13,6 @@ class PlayerController extends Controller
     {
         $query = Player::query();
 
-        // Optional search/filter from index page
         if ($request->has('search') && $request->search != '') {
             $query->where('name', 'like', '%'.$request->search.'%')
                   ->orWhere('club', 'like', '%'.$request->search.'%')
@@ -58,7 +57,6 @@ class PlayerController extends Controller
 
         $data = $request->all();
 
-        // Handle photo upload
         if ($request->hasFile('photo')) {
             $path = $request->file('photo')->store('photos', 'public');
             $data['photo'] = '/storage/' . $path;
@@ -146,5 +144,21 @@ class PlayerController extends Controller
         } else {
             return redirect()->back()->with('error', 'Player not found!');
         }
+    }
+
+    // NEW: Stats for Chart.js (Step 3)
+    public function statsChart()
+    {
+        // Fetch only fields needed for the graph
+        $players = Player::select(
+            'name', 
+            'goals', 
+            'assists', 
+            'matches', 
+            'minutes_played'
+        )->get();
+
+        // Pass to Blade (you can create players.stats or reuse existing Blade)
+        return view('players.stats', compact('players'));
     }
 }

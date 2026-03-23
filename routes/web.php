@@ -15,6 +15,9 @@ Route::get('/player-search', [PlayerController::class, 'search'])->name('players
 // Players resource routes
 Route::resource('players', PlayerController::class);
 
+// NEW: Route for Chart.js stats page (Step 4)
+Route::get('/players-stats', [PlayerController::class, 'statsChart'])->name('players.stats');
+
 // Database test route
 Route::get('/db-test', function() {
     try {

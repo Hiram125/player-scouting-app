@@ -7,18 +7,17 @@ use App\Models\Player;
 
 class PlayerController extends Controller
 {
-    // Existing method(s) you might already have can stay here
-    // For example, listing players in your Blade
+    // Show all players in your Blade
     public function index()
     {
         $players = Player::all(); // fetch all players
         return view('players.index', compact('players')); // existing Blade
     }
 
-    // NEW Step 3: method for Chart.js stats
+    // NEW: Stats for Chart.js
     public function statsChart()
     {
-        // fetch only fields needed for the graph
+        // fetch only the fields needed for the graph
         $players = Player::select(
             'name', 
             'goals', 
@@ -27,7 +26,7 @@ class PlayerController extends Controller
             'minutes_played'
         )->get();
 
-        // pass to Blade (create players.stats or use existing)
+        // pass data to a Blade view (resources/views/players/stats.blade.php)
         return view('players.stats', compact('players'));
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers; // plural "Controllers"
 
 use Illuminate\Http\Request;
 use App\Models\Player;
@@ -146,10 +146,9 @@ class PlayerController extends Controller
         }
     }
 
-    // NEW: Stats for Chart.js (Step 3)
+    // Stats for Chart.js
     public function statsChart()
     {
-        // Fetch only fields needed for the graph
         $players = Player::select(
             'name', 
             'goals', 
@@ -158,7 +157,6 @@ class PlayerController extends Controller
             'minutes_played'
         )->get();
 
-        // Pass to Blade (you can create players.stats or reuse existing Blade)
         return view('players.stats', compact('players'));
     }
 }

@@ -1,162 +1,135 @@
 @extends('layouts.app')
 
 @section('content')
-<<<<<<< HEAD
-<div class="container">
 
-    <h1 class="floating">✏️ Edit Player</h1>
+<div class="scout-wrapper">
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+    <div class="scout-card">
 
-    <div class="card">
+        <h2 class="floating">✏️ Edit Player</h2>
 
-        <div class="text-center mb-4">
-            @if($player->photo)
-                <img src="{{ asset('storage/'.$player->photo) }}" class="player-img">
-            @else
-                <img src="https://via.placeholder.com/150" class="player-img">
-            @endif
-        </div>
+        @if($errors->any())
+            <div style="color:red; margin-bottom:15px;">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         <form action="{{ route('players.update', $player->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
-            {{-- Name --}}
-            <div class="mb-3">
-                <label class="form-label text-white">Name</label>
-                <input type="text" name="name" value="{{ old('name', $player->name) }}" class="form-control">
+            <div class="hero-section">
+
+                <div class="image-circle">
+                    <img id="preview"
+                         src="{{ $player->photo ? asset('storage/'.$player->photo) : 'https://via.placeholder.com/180' }}"
+                         alt="Player Image">
+                </div>
+
+                <input type="file" name="photo" onchange="previewImage(event)" class="file-input">
+
+                <input type="text" name="name" value="{{ old('name', $player->name) }}" class="player-name" required>
+
             </div>
 
-            {{-- Date of Birth --}}
-            <div class="mb-3">
-                <label class="form-label text-white">Date of Birth</label>
-                <input type="date" name="date_of_birth" value="{{ old('date_of_birth', $player->date_of_birth) }}" class="form-control">
+            <div class="info-grid">
+
+                <div>
+                    <label>Date of Birth</label>
+                    <input type="date" name="date_of_birth" value="{{ old('date_of_birth', $player->date_of_birth) }}">
+                </div>
+
+                <div>
+                    <label>Nationality</label>
+                    <input type="text" name="nationality" value="{{ old('nationality', $player->nationality) }}">
+                </div>
+
+                <div>
+                    <label>Height (cm)</label>
+                    <input type="number" name="height" step="0.1" value="{{ old('height', $player->height) }}">
+                </div>
+
+                <div>
+                    <label>Weight (kg)</label>
+                    <input type="number" name="weight" step="0.1" value="{{ old('weight', $player->weight) }}">
+                </div>
+
+                <div>
+                    <label>Preferred Foot</label>
+                    <select name="preferred_foot">
+                        <option value="">Select</option>
+                        <option value="Right" {{ $player->preferred_foot == 'Right' ? 'selected' : '' }}>Right</option>
+                        <option value="Left" {{ $player->preferred_foot == 'Left' ? 'selected' : '' }}>Left</option>
+                        <option value="Both" {{ $player->preferred_foot == 'Both' ? 'selected' : '' }}>Both</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Position</label>
+                    <input type="text" name="position" value="{{ old('position', $player->position) }}">
+                </div>
+
+                <div>
+                    <label>Club</label>
+                    <input type="text" name="club" value="{{ old('club', $player->club) }}">
+                </div>
+
+                <div>
+                    <label>Overall Rating</label>
+                    <input type="number" name="overall_rating" value="{{ old('overall_rating', $player->overall_rating) }}">
+                </div>
+
             </div>
 
-            {{-- Nationality --}}
-            <div class="mb-3">
-                <label class="form-label text-white">Nationality</label>
-                <input type="text" name="nationality" value="{{ old('nationality', $player->nationality) }}" class="form-control">
-            </div>
-
-            {{-- Height --}}
-            <div class="mb-3">
-                <label class="form-label text-white">Height (cm)</label>
-                <input type="number" step="0.1" name="height" value="{{ old('height', $player->height) }}" class="form-control">
-            </div>
-
-            {{-- Weight --}}
-            <div class="mb-3">
-                <label class="form-label text-white">Weight (kg)</label>
-                <input type="number" step="0.1" name="weight" value="{{ old('weight', $player->weight) }}" class="form-control">
-            </div>
-
-            {{-- Preferred Foot --}}
-            <div class="mb-3">
-                <label class="form-label text-white">Preferred Foot</label>
-                <select name="preferred_foot" class="form-control">
-                    <option value="">Preferred Foot</option>
-                    <option value="Right" {{ old('preferred_foot', $player->preferred_foot) == 'Right' ? 'selected' : '' }}>Right</option>
-                    <option value="Left" {{ old('preferred_foot', $player->preferred_foot) == 'Left' ? 'selected' : '' }}>Left</option>
-                    <option value="Both" {{ old('preferred_foot', $player->preferred_foot) == 'Both' ? 'selected' : '' }}>Both</option>
-                </select>
-            </div>
-
-            {{-- Position --}}
-            <div class="mb-3">
-                <label class="form-label text-white">Position</label>
-                <input type="text" name="position" value="{{ old('position', $player->position) }}" class="form-control">
-            </div>
-
-            {{-- Club --}}
-            <div class="mb-3">
-                <label class="form-label text-white">Club</label>
-                <input type="text" name="club" value="{{ old('club', $player->club) }}" class="form-control">
-            </div>
-
-            {{-- Age --}}
-            <div class="mb-3">
-                <label class="form-label text-white">Age</label>
-                <input type="number" name="age" value="{{ old('age', $player->age) }}" class="form-control">
-            </div>
-
-            {{-- Stats --}}
-            <div class="mb-3">
-                <label class="form-label text-white">Technical Rating</label>
-                <input type="number" name="technical_rating" value="{{ old('technical_rating', $player->technical_rating) }}" class="form-control">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label text-white">Physical Rating</label>
-                <input type="number" name="physical_rating" value="{{ old('physical_rating', $player->physical_rating) }}" class="form-control">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label text-white">Passing</label>
-                <input type="number" name="passing" value="{{ old('passing', $player->passing) }}" class="form-control">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label text-white">Dribbling</label>
-                <input type="number" name="dribbling" value="{{ old('dribbling', $player->dribbling) }}" class="form-control">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label text-white">Strength</label>
-                <input type="number" name="strength" value="{{ old('strength', $player->strength) }}" class="form-control">
-            </div>
-
-            {{-- Strengths --}}
-            <div class="mb-3">
-                <label class="form-label text-white">Strengths</label>
-                <textarea name="strengths" class="form-control">{{ old('strengths', $player->strengths) }}</textarea>
-            </div>
-
-            {{-- Weaknesses --}}
-            <div class="mb-3">
-                <label class="form-label text-white">Weaknesses</label>
-                <textarea name="weaknesses" class="form-control">{{ old('weaknesses', $player->weaknesses) }}</textarea>
-            </div>
-
-            {{-- Comments --}}
-            <div class="mb-3">
-                <label class="form-label text-white">Comments</label>
-                <textarea name="comments" class="form-control">{{ old('comments', $player->comments) }}</textarea>
-            </div>
-
-            {{-- Photo --}}
-            <div class="mb-3">
-                <label class="form-label text-white">Photo</label>
-                <input type="file" name="photo" class="form-control">
-            </div>
-
-            {{-- Buttons --}}
-            <div class="text-center mt-4">
-                <button type="submit" class="btn btn-edit">💾 Update Player</button>
-                <a href="{{ route('players.show', $player->id) }}" class="btn btn-back">⬅ Cancel</a>
-            </div>
+            <button type="submit">Update Player</button>
 
         </form>
 
     </div>
+
 </div>
+
+<script>
+function previewImage(event) {
+    const reader = new FileReader();
+    reader.onload = function () {
+        document.getElementById('preview').src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+}
+</script>
 
 <style>
 body {
-    background: linear-gradient(135deg, #141e30, #243b55);
-    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(circle at top, #0f172a, #020617);
+    font-family: 'Segoe UI', sans-serif;
     color: white;
+    margin: 0;
+}
+
+.scout-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+}
+
+.scout-card {
+    width: 100%;
+    max-width: 600px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(20px);
+    border-radius: 25px;
+    padding: 30px;
+    text-align: center;
 }
 
 .floating {
-    text-align: center;
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin: 30px 0;
-    color: #ffffff;
+    font-size: 26px;
+    margin-bottom: 20px;
     animation: float 3s ease-in-out infinite;
 }
 
@@ -166,153 +139,77 @@ body {
     100% { transform: translateY(0px); }
 }
 
-.card {
-    max-width: 700px;
+.image-circle {
+    width: 180px;
+    height: 180px;
     margin: auto;
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(15px);
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-    transition: 0.4s;
-}
-
-.card:hover { transform: scale(1.02); }
-
-.player-img {
-    width: 150px;
-    height: 150px;
     border-radius: 50%;
+    border: 4px solid #00d4ff;
+    overflow: hidden;
+    box-shadow: 0 0 25px #00d4ff;
+}
+
+.image-circle img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    border: 4px solid white;
-    margin-bottom: 20px;
 }
 
-input.form-control, textarea.form-control, select.form-control {
-    background: rgba(255,255,255,0.05);
+.file-input {
+    margin-top: 10px;
+}
+
+.player-name {
+    margin-top: 15px;
+    font-size: 22px;
+    text-align: center;
     border: none;
+    background: transparent;
     color: white;
-    border-radius: 10px;
-    padding: 10px;
-}
-
-input.form-control:focus, textarea.form-control:focus, select.form-control:focus {
-    background: rgba(255,255,255,0.12);
+    border-bottom: 2px solid #00d4ff;
     outline: none;
-    box-shadow: 0 0 10px rgba(0,198,255,0.5);
+    width: 100%;
 }
 
-.btn {
-    display: inline-block;
-    padding: 12px 25px;
-    margin: 5px;
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 25px;
+}
+
+label {
+    font-size: 12px;
+    opacity: 0.7;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255,255,255,0.08);
+    color: white;
+    outline: none;
+}
+
+button {
+    margin-top: 25px;
+    width: 100%;
+    padding: 14px;
+    border: none;
     border-radius: 30px;
-    text-decoration: none;
+    background: linear-gradient(45deg, #00d4ff, #0072ff);
     color: white;
     font-weight: bold;
-    transition: 0.4s;
+    cursor: pointer;
 }
 
-.btn-edit {
-    background: linear-gradient(45deg, #00c6ff, #0072ff);
-}
-
-.btn-back {
-    background: linear-gradient(45deg, #00ff87, #60efff);
-    color: black;
-}
-
-.btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 15px rgba(255,255,255,0.6);
+button:hover {
+    transform: scale(1.03);
 }
 </style>
-=======
-<div class="container my-5">
-    <h1 class="mb-4">Edit Player</h1>
 
-    <!-- Validation Errors -->
-    @if($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <form action="{{ route('players.update', $player->id) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
-
-        <!-- Player Info Header -->
-        <div class="row mb-4">
-            <div class="col-md-4 text-center">
-                <img src="{{ $player->photo ?? 'https://via.placeholder.com/200x200?text=Player' }}" 
-                     class="img-fluid rounded-circle shadow mb-2" style="width:200px;height:200px;object-fit:cover;" alt="Player Photo">
-                <input type="file" name="photo" class="form-control">
-            </div>
-            <div class="col-md-8 d-flex flex-column justify-content-center">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Name</label>
-                        <input type="text" name="name" class="form-control" value="{{ old('name', $player->name) }}" required>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Age</label>
-                        <input type="number" name="age" class="form-control" value="{{ old('age', $player->age) }}" required>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Position</label>
-                        <select name="position" class="form-control" required>
-                            @foreach(['GK','CB','RB','LB','CM','RW','LW','ST'] as $pos)
-                                <option value="{{ $pos }}" {{ old('position', $player->position) == $pos ? 'selected' : '' }}>{{ $pos }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Club</label>
-                        <input type="text" name="club" class="form-control" value="{{ old('club', $player->club) }}">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Comments</label>
-                        <input type="text" name="comments" class="form-control" value="{{ old('comments', $player->comments) }}">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Attributes 0-100 -->
-        <div class="row mb-3">
-            @foreach(['pace','shooting','passing','dribbling','strength'] as $attr)
-                <div class="col-md-2">
-                    <label class="form-label">{{ ucfirst($attr) }}</label>
-                    <input type="number" name="{{ $attr }}" class="form-control" min="0" max="100" value="{{ old($attr, $player->$attr) }}" required>
-                </div>
-            @endforeach
-        </div>
-
-        <!-- Match Stats -->
-        <div class="row mb-3">
-            @foreach(['matches'=>'Matches Played','goals'=>'Goals','assists'=>'Assists','minutes_played'=>'Minutes Played'] as $field=>$label)
-                <div class="col-md-3">
-                    <label class="form-label">{{ $label }}</label>
-                    <input type="number" name="{{ $field }}" class="form-control" min="0" value="{{ old($field, $player->$field) }}">
-                </div>
-            @endforeach
-        </div>
-
-        <!-- Submit Buttons -->
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary me-2">Update Player</button>
-            <a href="{{ route('players.show', $player->id) }}" class="btn btn-secondary">Cancel</a>
-        </div>
-
-    </form>
-</div>
->>>>>>> 9b886b4ec612b110d38c0bf916c63528599a5d4e
 @endsection

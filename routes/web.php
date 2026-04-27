@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\FixtureController;
+use App\Http\Controllers\CompareController;
 
 Route::get('/', function () {
     return view('home');
@@ -28,7 +29,10 @@ Route::delete('/reports/{report}', [ReportsController::class, 'destroy'])->name(
 
 Route::resource('fixtures', FixtureController::class);
 
-Route::get('/db-test', function() {
+Route::get('/compare', [CompareController::class, 'index'])->name('compare.index');
+Route::post('/compare', [CompareController::class, 'compare'])->name('compare.compare');
+
+Route::get('/db-test', function () {
     try {
         DB::connection()->getPdo();
         return 'Database is connected!';

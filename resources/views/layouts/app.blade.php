@@ -1,74 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<<<<<<< HEAD
-<meta charset="UTF-8">
-<title>Scouting System</title>
+    <meta charset="UTF-8">
+    <title>Scouting System</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
-<style>
-body {
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    background: #0f172a;
-    color: white;
-}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-/* TOP BAR */
-.topbar {
-    background: #162447;
-    padding: 15px;
-    display: flex;
-    align-items: center;
-}
+        body {
+            background: #0f172a;
+            color: white;
+        }
 
-/* MENU BUTTON */
-.menu-btn {
-    font-size: 28px;
-    cursor: pointer;
-    margin-right: 15px;
-}
+        /* TOPBAR */
+        .topbar {
+            background: #111827;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 1001;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
 
-/* SIDEBAR */
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 0;
-    background: #111827;
-    overflow-x: hidden;
-    transition: 0.3s;
-    padding-top: 60px;
-    z-index: 1000;
-}
+        .menu-btn {
+            font-size: 26px;
+            cursor: pointer;
+            color: white;
+            transition: 0.3s;
+        }
 
-.sidebar a {
-    display: block;
-    padding: 15px 25px;
-    text-decoration: none;
-    color: white;
-    transition: 0.2s;
-}
+        .menu-btn:hover {
+            color: #00d4ff;
+        }
 
-.sidebar a:hover {
-    background: #e43f5a;
-}
+        .topbar h3 {
+            font-weight: 500;
+        }
 
-/* CONTENT */
-.content {
-    margin-left: 0;
-    padding: 20px;
-    transition: 0.3s;
-}
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0;
+            background: #0b1220;
+            overflow-x: hidden;
+            transition: 0.3s ease;
+            padding-top: 70px;
+            z-index: 1002;
+            box-shadow: 5px 0 20px rgba(0,0,0,0.5);
+        }
 
-/* ACTIVE STATE */
-.active {
-    background: #00ff87;
-    color: black !important;
-}
-</style>
+        .sidebar a {
+            display: block;
+            padding: 15px 25px;
+            text-decoration: none;
+            color: #cbd5e1;
+            transition: 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar a:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 3px solid #00d4ff;
+            color: white;
+        }
+
+        .sidebar.open {
+            width: 260px;
+        }
+
+        /* OVERLAY */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 1000;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        /* MAIN CONTENT SHIFT */
+        .main-wrapper {
+            transition: 0.3s ease;
+            margin-left: 0;
+        }
+
+        /* CONTENT AREA */
+        .content {
+            padding: 25px;
+        }
+    </style>
 </head>
 
 <body>
@@ -86,78 +125,36 @@ body {
     <a href="{{ route('reports.index') }}">📊 Reports</a>
     <a href="{{ route('reports.create') }}">➕ Create Report</a>
     <a href="{{ route('fixtures.index') }}">📅 Fixtures</a>
-    
+    <a href="{{ route('compare.index') }}">⚖️ Compare</a>
 </div>
 
-<!-- PAGE CONTENT -->
-<div id="content" class="content">
-    @yield('content')
+<!-- OVERLAY -->
+<div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+
+<!-- MAIN CONTENT -->
+<div id="mainWrapper" class="main-wrapper">
+    <div class="content">
+        @yield('content')
+    </div>
 </div>
 
 <script>
 function toggleMenu() {
-    let sidebar = document.getElementById("sidebar");
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+    const wrapper = document.getElementById("mainWrapper");
 
-    if (sidebar.style.width === "250px") {
-        sidebar.style.width = "0";
+    sidebar.classList.toggle("open");
+    overlay.classList.toggle("show");
+
+    // shift content when sidebar opens
+    if (sidebar.classList.contains("open")) {
+        wrapper.style.marginLeft = "260px";
     } else {
-        sidebar.style.width = "250px";
+        wrapper.style.marginLeft = "0";
     }
 }
 </script>
 
-=======
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ScoutReport App</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            padding-top: 70px; /* space for fixed navbar */
-            background-color: #f8f9fa;
-        }
-        .navbar-brand {
-            font-weight: bold;
-        }
-        .nav-link.active {
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm">
-        <div class="container">
-            <a class="navbar-brand" href="{{ route('home') }}">ScoutReport</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('players.index') ? 'active' : '' }}" href="{{ route('players.index') }}">Players</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('players.create') ? 'active' : '' }}" href="{{ route('players.create') }}">Add Player</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="container my-4">
-        @yield('content')
-    </main>
-
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
->>>>>>> 9b886b4ec612b110d38c0bf916c63528599a5d4e
 </body>
 </html>

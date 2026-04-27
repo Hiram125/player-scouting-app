@@ -76,12 +76,9 @@
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
-<<<<<<< HEAD
-=======
         "platform": {
             "php": "8.2.0"
         },
->>>>>>> 9b886b4ec612b110d38c0bf916c63528599a5d4e
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true

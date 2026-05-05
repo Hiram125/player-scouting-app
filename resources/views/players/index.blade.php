@@ -3,280 +3,202 @@
 @section('content')
 
 <style>
-.wrapper {
-    padding: 24px;
+.page-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 5px;
 }
 
-.header h1 {
-    font-size: 28px;
-    font-weight: 800;
-    color: #f9fafb;
-}
-
-.header p {
-    color: #9ca3af;
+.subtitle {
+    color: #94a3b8;
     font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.filters {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 .filters input,
 .filters select {
-    background: #111827;
+    padding: 10px;
+    border-radius: 6px;
     border: 1px solid #1f2937;
-    color: #e5e7eb;
-    padding: 12px;
-    border-radius: 10px;
-}
-
-.count {
-    color: #9ca3af;
-}
-
-.btn {
-    background: linear-gradient(45deg, #2563eb, #1d4ed8);
-    color: white;
-    padding: 10px 18px;
-    border-radius: 12px;
-    text-decoration: none;
-    font-weight: 600;
-    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
-    transition: all 0.25s ease;
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 25px rgba(37, 99, 235, 0.6);
-}
-
-.card {
     background: #111827;
-    border: 1px solid #1f2937;
-    border-radius: 14px;
-    overflow: hidden;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-thead {
-    background: #0f172a;
-}
-
-th {
-    color: #9ca3af;
-    padding: 14px;
-    text-align: left;
-    font-size: 12px;
-    text-transform: uppercase;
-}
-
-td {
-    padding: 14px;
-    border-top: 1px solid #1f2937;
     color: #e5e7eb;
 }
 
-tr:hover {
-    background: #0f172a;
-}
-
-.name {
-    color: white;
-    font-weight: 700;
-}
-
-.meta {
-    color: #9ca3af;
-    font-size: 12px;
-}
-
-.badge {
-    padding: 6px 12px;
-    border-radius: 999px;
-    font-size: 12px;
-    border: 1px solid transparent;
-}
-
-.bg-green {
-    background: rgba(34, 197, 94, 0.2);
-    color: #22c55e;
-    border-color: rgba(34, 197, 94, 0.4);
-}
-
-.bg-yellow {
-    background: rgba(234, 179, 8, 0.2);
-    color: #eab308;
-    border-color: rgba(234, 179, 8, 0.4);
-}
-
-.bg-red {
-    background: rgba(239, 68, 68, 0.2);
-    color: #ef4444;
-    border-color: rgba(239, 68, 68, 0.4);
-}
-
-.bg-gray {
-    background: rgba(148, 163, 184, 0.2);
-    color: #94a3b8;
-    border-color: rgba(148, 163, 184, 0.4);
-}
-
-.action-btn {
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: 0.2s ease;
-    display: inline-block;
-}
-
-.view-btn {
-    background: rgba(96, 165, 250, 0.15);
-    color: #60a5fa;
-}
-
-.view-btn:hover {
-    background: #60a5fa;
-    color: #0b0f19;
-}
-
-.edit-btn {
-    background: rgba(251, 191, 36, 0.15);
-    color: #fbbf24;
-}
-
-.edit-btn:hover {
-    background: #fbbf24;
-    color: #0b0f19;
-}
-
-.delete-btn {
-    background: rgba(248, 113, 113, 0.15);
-    color: #f87171;
+.filters button {
+    grid-column: span 4;
+    padding: 10px;
+    background: #22c55e;
     border: none;
+    border-radius: 6px;
+    color: black;
+    font-weight: 600;
     cursor: pointer;
 }
 
-.delete-btn:hover {
-    background: #f87171;
-    color: #0b0f19;
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #111827;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table th {
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #94a3b8;
+    padding: 12px;
+    border-bottom: 1px solid #1f2937;
+}
+
+.table td {
+    padding: 12px;
+    border-bottom: 1px solid #1f2937;
+    font-size: 14px;
+}
+
+.table tr:hover {
+    background: #1f2937;
+    cursor: pointer;
+}
+
+.badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.sign { background: #14532d; color: #22c55e; }
+.monitor { background: #78350f; color: #fbbf24; }
+.reject { background: #7f1d1d; color: #f87171; }
+
+.empty {
+    text-align: center;
+    padding: 40px;
+    color: #94a3b8;
 }
 </style>
 
-<div class="wrapper">
+<div>
 
-    <div class="header">
-        <h1>Scouting Intelligence Dashboard</h1>
-        <p>Player evaluation & recruitment overview</p>
+    <!-- HEADER -->
+    <div>
+        <div class="page-title">Players</div>
+        <div class="subtitle">{{ $players->total() }} total players</div>
     </div>
 
-    <div class="filters" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:20px 0;">
-        <input type="text" placeholder="Search player or club...">
+    <!-- FILTERS -->
+    <form method="GET" class="filters">
 
-        <select>
-            <option>All Positions</option>
-            <option>ST</option>
-            <option>CM</option>
-            <option>CB</option>
-            <option>LW</option>
+        <input type="text" name="search" placeholder="Search player or club" value="{{ request('search') }}">
+
+        <select name="position">
+            <option value="">All Positions</option>
+            @foreach($positions as $position)
+                <option value="{{ $position }}" {{ request('position') == $position ? 'selected' : '' }}>
+                    {{ $position }}
+                </option>
+            @endforeach
         </select>
 
-        <select>
-            <option>All Recommendations</option>
-            <option>reject</option>
-            <option>continue scouting</option>
-            <option>sign immediately</option>
+        <select name="recommendation">
+            <option value="">All Decisions</option>
+            <option value="Sign">Sign</option>
+            <option value="Monitor">Monitor</option>
+            <option value="Reject">Reject</option>
         </select>
-    </div>
 
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
-        <div class="count">
-            Total Players: {{ count($players) }}
-        </div>
+        <select name="min_score">
+            <option value="">Any Score</option>
+            <option value="5">5+</option>
+            <option value="6">6+</option>
+            <option value="7">7+</option>
+            <option value="8">8+</option>
+        </select>
 
-        <a href="{{ route('players.create') }}" class="btn">
-            ➕ Add Player
-        </a>
-    </div>
+        <button type="submit">Apply Filters</button>
+    </form>
 
-    <div class="card">
+    <!-- TABLE -->
+    <table class="table">
 
-        <table>
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>Pos</th>
+                <th>Age</th>
+                <th>Score</th>
+                <th>Decision</th>
+                <th>Scouted</th>
+            </tr>
+        </thead>
 
-            <thead>
-                <tr>
-                    <th>Player</th>
-                    <th>Pos</th>
-                    <th>Recommendation</th>
-                    <th>Scouted</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
+        <tbody>
 
-            <tbody>
+        @forelse($players as $player)
 
-                @foreach($players as $player)
+            <tr onclick="window.location='/players/{{ $player->id }}'">
 
-                <tr>
+                <td>
+                    <div style="font-weight:600;">{{ $player->name }}</div>
+                    <div style="color:#94a3b8; font-size:12px;">
+                        {{ $player->club }}
+                    </div>
+                </td>
 
-                    <td>
-                        <div class="name">{{ $player->name }}</div>
-                        <div class="meta">{{ $player->club }} · {{ $player->nationality }}</div>
-                    </td>
+                <td style="color:#22c55e; font-family:monospace;">
+                    {{ $player->position }}
+                </td>
 
-                    <td>{{ $player->position }}</td>
+                <td>{{ $player->age ?? '-' }}</td>
 
-                    <td>
-                        @php
-                            $rec = strtolower(trim(optional($player->latestReport)->recommendation));
-                        @endphp
+                <td style="font-weight:700;">
+                    {{ $player->score ?? '-' }}
+                </td>
 
-                        <span class="badge
-                            @if($rec === 'sign immediately') bg-green
-                            @elseif($rec === 'continue scouting') bg-yellow
-                            @elseif($rec === 'reject') bg-red
-                            @else bg-gray
-                            @endif
-                        ">
-                            {{ optional($player->latestReport)->recommendation ?? 'No Report' }}
-                        </span>
-                    </td>
+                <td>
+                    @if($player->recommendation == 'Sign')
+                        <span class="badge sign">Sign</span>
+                    @elseif($player->recommendation == 'Monitor')
+                        <span class="badge monitor">Monitor</span>
+                    @elseif($player->recommendation == 'Reject')
+                        <span class="badge reject">Reject</span>
+                    @else
+                        <span style="color:#94a3b8;">-</span>
+                    @endif
+                </td>
 
-                    <td class="meta">
-                        {{ $player->scouted_date }}
-                    </td>
+                <td style="color:#94a3b8;">
+                    {{ $player->scouted_date ?? '-' }}
+                </td>
 
-                    <td style="display:flex; gap:8px;">
+            </tr>
 
-                        <a href="{{ route('players.show', $player->id) }}" class="action-btn view-btn">
-                            View
-                        </a>
+        @empty
 
-                        <a href="{{ route('players.edit', $player->id) }}" class="action-btn edit-btn">
-                            Edit
-                        </a>
+            <tr>
+                <td colspan="6" class="empty">
+                    No players found
+                </td>
+            </tr>
 
-                        <form action="{{ route('players.destroy', $player->id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
+        @endforelse
 
-                            <button onclick="return confirm('Delete player?')" class="action-btn delete-btn">
-                                Delete
-                            </button>
-                        </form>
+        </tbody>
 
-                    </td>
+    </table>
 
-                </tr>
-
-                @endforeach
-
-            </tbody>
-
-        </table>
-
+    <!-- PAGINATION -->
+    <div style="margin-top:15px;">
+        {{ $players->withQueryString()->links() }}
     </div>
 
 </div>

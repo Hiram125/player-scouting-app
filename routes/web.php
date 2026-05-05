@@ -12,10 +12,14 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
-Route::resource('players', PlayerController::class);
+Route::get('/players', [PlayerController::class, 'index'])->name('players.index');
+Route::get('/players/create', [PlayerController::class, 'create'])->name('players.create');
+Route::post('/players', [PlayerController::class, 'store'])->name('players.store');
+Route::get('/players/{player}', [PlayerController::class, 'show'])->name('players.show');
+Route::get('/players/{player}/edit', [PlayerController::class, 'edit'])->name('players.edit');
+Route::put('/players/{player}', [PlayerController::class, 'update'])->name('players.update');
 
 Route::get('/player-search', [PlayerController::class, 'search'])->name('players.search');
-
 Route::get('/players-stats', [PlayerController::class, 'statsChart'])->name('players.stats');
 
 Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');

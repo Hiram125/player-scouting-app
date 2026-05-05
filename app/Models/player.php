@@ -26,11 +26,22 @@ class Player extends Model
         'strength',
         'overall_rating',
         'comments',
-        'photo'
+        'photo',
+        'scouted_date'
+    ];
+
+    protected $casts = [
+        'scouted_date' => 'date',
+        'date_of_birth' => 'date',
     ];
 
     public function reports()
     {
         return $this->hasMany(Report::class, 'player_id');
+    }
+
+    public function latestReport()
+    {
+        return $this->hasOne(Report::class)->latestOfMany('created_at');
     }
 }

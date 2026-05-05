@@ -78,6 +78,12 @@
                     <input type="number" name="overall_rating">
                 </div>
 
+                <!-- ✅ ADDED SCOUTED DATE HERE -->
+                <div>
+                    <label>Scouted Date</label>
+                    <input type="date" name="scouted_date">
+                </div>
+
             </div>
 
             <button type="submit">Save Player</button>

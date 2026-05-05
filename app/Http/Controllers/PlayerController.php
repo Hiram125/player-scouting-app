@@ -10,12 +10,14 @@ class PlayerController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Player::query();
+        $query = Player::with('latestReport');
 
         if ($request->has('search') && $request->search != '') {
-            $query->where('name', 'like', '%'.$request->search.'%')
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%'.$request->search.'%')
                   ->orWhere('club', 'like', '%'.$request->search.'%')
                   ->orWhere('position', 'like', '%'.$request->search.'%');
+            });
         }
 
         if ($request->has('position') && $request->position != '') {
@@ -32,13 +34,13 @@ class PlayerController extends Controller
         return view('players.create');
     }
 
-    // ✅ FIXED STORE METHOD (ONLY BASIC INFO REQUIRED)
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'position' => 'required|string|max:50',
             'club' => 'nullable|string|max:255',
+            'scouted_date' => 'nullable|date',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -46,8 +48,8 @@ class PlayerController extends Controller
             'name' => $request->name,
             'position' => $request->position,
             'club' => $request->club,
+            'scouted_date' => $request->scouted_date,
 
-            // stats start as NULL (filled later in reports/edit)
             'age' => null,
             'pace' => null,
             'shooting' => null,
@@ -82,13 +84,13 @@ class PlayerController extends Controller
         return view('players.edit', compact('player'));
     }
 
-    // ⚠️ KEEP FULL VALIDATION HERE (edit is where stats are updated)
     public function update(Request $request, Player $player)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'position' => 'required|string|max:50',
             'club' => 'nullable|string|max:255',
+            'scouted_date' => 'nullable|date',
 
             'age' => 'nullable|integer|min:10|max:50',
             'pace' => 'nullable|integer|min:0|max:100',

@@ -14,10 +14,11 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        body {
-            background: #0f172a;
-            color: white;
-        }
+body {
+    background: #0f172a;
+    color: #e5e7eb;
+}
+
 
         /* TOPBAR */
         .topbar {

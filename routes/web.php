@@ -8,9 +8,7 @@ use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\FixtureController;
 use App\Http\Controllers\CompareController;
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+Route::get('/', fn () => view('home'))->name('home');
 
 Route::get('/players', [PlayerController::class, 'index'])->name('players.index');
 Route::get('/players/create', [PlayerController::class, 'create'])->name('players.create');
@@ -18,6 +16,7 @@ Route::post('/players', [PlayerController::class, 'store'])->name('players.store
 Route::get('/players/{player}', [PlayerController::class, 'show'])->name('players.show');
 Route::get('/players/{player}/edit', [PlayerController::class, 'edit'])->name('players.edit');
 Route::put('/players/{player}', [PlayerController::class, 'update'])->name('players.update');
+Route::delete('/players/{player}', [PlayerController::class, 'destroy'])->name('players.destroy');
 
 Route::get('/player-search', [PlayerController::class, 'search'])->name('players.search');
 Route::get('/players-stats', [PlayerController::class, 'statsChart'])->name('players.stats');
